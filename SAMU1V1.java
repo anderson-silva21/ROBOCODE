@@ -12,7 +12,9 @@ import java.awt.*;
 
 public class SAMU1V1 extends AdvancedRobot {
 	int motionDirection = 1;//direcao do movimento (frente tras)
-	double edgeMovement; // movimento necessario para alcançar a borda
+	double edgeMovement; // movimento necessario para alcançar a borda]
+	int aux = 0;
+	boolean atirei = false;
 
 	public void run() {
 		setColors(Color.white,Color.red,Color.red); // Corpo X Arma Y Radar Z
@@ -45,24 +47,47 @@ public class SAMU1V1 extends AdvancedRobot {
 			double turnCannon = 0.0;//o quanto eu devo virar minha arma
 			setTurnRadarLeftRadians(getRadarTurnRemainingRadians());//trava o radar em algum inimigo scaneado
 			aimBot(turnCannon, angleObject, enemyVel, motionDirection, e);//funcao de mira inteligente
+			atirei = true;
 			shoot(e);//atiro
+			atirei = false;
 		}else{//quando o modo walls esta ativado
 			double enPosX = getX() + e.getDistance() * Math.sin(angleObject);//posicao do inimigo no eixo x
 			double enPosY = getY() + e.getDistance() * Math.cos(angleObject);//posicao do inimigo no eixo y
 			double enemyHeading = e.getHeadingRadians();
 			intelAim(enPosX, enPosY, enemyHeading, enemyVel, angleObject);//funcao de mira inteligente
+			atirei = true;
 			shoot(e);
+			atirei = false;
 			setAhead((e.getDistance() - 140) * motionDirection);//faz um "pendulo" para atirar e desviar
 		}
 	}
 
 	public void onHitWall(HitWallEvent e){//quando o modo tracker esta ativado
-		if(getOthers() < 3)
-			motionDirection=-motionDirection;//direcao oposta caso eu colida com a parede    
+		if(getOthers() < 3){
+			aux++;
+			motionDirection=-motionDirection;//direcao oposta caso eu colida com a parede
+			if(aux == 10){
+				clearAllEvents();//limpa eventos pendentes
+				aux = 0;
+			}
 		}
-
+	}
+	public void onHitByBullet(HitByBulletEvent e){
+		if(getOthers() > 2 && !atirei){
+			if (e.getBearing() > -90 && e.getBearing() < 90) //se o inimigo esta na nossa frente, va para tras um pouco
+				back(100);          
+			else // se o inimigo esta atras de nos, va para frente um pouco
+				ahead(100);
+			System.out.println("tomei tiro e nao dei");
+		}
+	}
 		public void onHitRobot(HitRobotEvent e) {//quando o modo walls esta ativado
 		if(getOthers() > 2){
+			if (e.getBearing() > -90 && e.getBearing() < 90) //se o inimigo esta na nossa frente, va para tras um pouco
+				back(100);          
+			else // se o inimigo esta atras de nos, va para frente um pouco
+				ahead(100);
+		}else{
 			if (e.getBearing() > -90 && e.getBearing() < 90) //se o inimigo esta na nossa frente, va para tras um pouco
 				back(100);          
 			else // se o inimigo esta atras de nos, va para frente um pouco
@@ -72,8 +97,12 @@ public class SAMU1V1 extends AdvancedRobot {
 
 	public void shoot(ScannedRobotEvent e) {//funcao que determina a forma correta de atirar
 		if(e.getDistance() < 800){//caso a distancia do inimigo scaneado seja menor que 800 eu posso atirar
-			double firePower = decideFirePower(e);//define a potencia do tiro na funcao decideFirePower
-			fire(firePower);//atira com a potencia dinamica
+			double firePower = decideFirePower(e);//define a potencia do tiro na funcao decideFirePower	
+			if(e.getVelocity() == 0){
+				fireBullet(firePower);
+			}else{
+				fire(firePower);//atira com a potencia dinamica
+			}
 		}
 	}
 
@@ -116,6 +145,7 @@ public class SAMU1V1 extends AdvancedRobot {
 			setTurnLeft(-90 - e.getBearing()); //viro perpendicular ao meu inimigo scaneado
 			setAhead((e.getDistance() - 140) * motionDirection);//corro para frente
 		}
+		
 	}
 
 	public void intelAim(double enPosX, double enPosY, double enemyHeading, double enemyVel, double angleObject){//funcao de mira inteligente do walls
@@ -137,5 +167,12 @@ public class SAMU1V1 extends AdvancedRobot {
 		double alpha = Utils.normalAbsoluteAngle(Math.atan2(prevX - getX(), prevY - getY()));
 		setTurnRadarRightRadians(Utils.normalRelativeAngle(angleObject - getRadarHeadingRadians()));
 		setTurnGunRightRadians(Utils.normalRelativeAngle(alpha - getGunHeadingRadians()));
+	}
+	
+	public void onWin(WinEvent e) { //span emotes
+		for (int i = 0; i < 50; i++) {
+			turnRight(30);
+			turnLeft(30);
+		}
 	}
 }
