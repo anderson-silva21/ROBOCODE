@@ -1,3 +1,10 @@
+
+/**
+* @file SAMU1V1.java
+* @authors Anderson Silva, Adalberto Guedes, Mariana Rodrigues, Bruno Keller
+* @date 02 Set 2022
+* @brief  Um advanced robot inspirado no comportamento dos sampleRobots Walls e Tracker
+*/
 package upa;
 import robocode.*;
 import robocode.util.*;
