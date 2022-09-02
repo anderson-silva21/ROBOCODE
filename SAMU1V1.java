@@ -122,7 +122,7 @@ public class SAMU1V1 extends AdvancedRobot {
 		while((++delta) * (20.0 - 3.0 * bulletPower) < Point2D.Double.distance(myPosX, myPosY, prevX, prevY)){	//point2d, distancia entre pontos 	
 			prevX += Math.sin(enemyHeading) * enemyVel;	
 			prevY += Math.cos(enemyHeading) * enemyVel;
-			if(	prevX < 18.0 || prevY < 18.0 || prevX > larguraCampo - 18.0 || prevY > alturaCampo - 18.0){
+			if(prevX < 18.0 || prevY < 18.0 || prevX > larguraCampo - 18.0 || prevY > alturaCampo - 18.0){
 				prevX = Math.min(Math.max(18.0, prevX), larguraCampo - 18.0);	
 				prevY = Math.min(Math.max(18.0, prevY), alturaCampo - 18.0);
 				break;
