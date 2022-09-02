@@ -156,17 +156,17 @@ public class SAMU1V1 extends AdvancedRobot {
 		double alturaCampo = getBattleFieldHeight(), larguraCampo = getBattleFieldWidth();//get largura e altura
 		double prevX = enPosX, prevY = enPosY;//inicio as previsoes no eixo x e y com a posicao x e y do inimigo
 		while((++delta) * (20.0 - 3.0 * bulletPower) < Point2D.Double.distance(myPosX, myPosY, prevX, prevY)){	//point2d, distancia entre pontos 	
-			prevX += Math.sin(enemyHeading) * enemyVel;	
-			prevY += Math.cos(enemyHeading) * enemyVel;
+			prevX += Math.sin(enemyHeading) * enemyVel; //previsao de x do inimigo de acordo com sua velocidade 
+			prevY += Math.cos(enemyHeading) * enemyVel; //previsao de y do inimigo de acordo com sua velocidade 
 			if(prevX < 18.0 || prevY < 18.0 || prevX > larguraCampo - 18.0 || prevY > alturaCampo - 18.0){
-				prevX = Math.min(Math.max(18.0, prevX), larguraCampo - 18.0);	
+				prevX = Math.min(Math.max(18.0, prevX), larguraCampo - 18.0);	//entre 18 e 982
 				prevY = Math.min(Math.max(18.0, prevY), alturaCampo - 18.0);
 				break;
 			}
 		}
-		double alpha = Utils.normalAbsoluteAngle(Math.atan2(prevX - getX(), prevY - getY()));
-		setTurnRadarRightRadians(Utils.normalRelativeAngle(angleObject - getRadarHeadingRadians()));
-		setTurnGunRightRadians(Utils.normalRelativeAngle(alpha - getGunHeadingRadians()));
+		double alpha = Utils.normalAbsoluteAngle(Math.atan2(prevX - getX(), prevY - getY())); //retorna o valor do angulo em radianos entre x e y
+		setTurnRadarRightRadians(Utils.normalRelativeAngle(angleObject - getRadarHeadingRadians())); // mirar o radar no inimigo
+		setTurnGunRightRadians(Utils.normalRelativeAngle(alpha - getGunHeadingRadians())); //mirar a arma no inimigo
 	}
 	
 	public void onWin(WinEvent e) { //span emotes
