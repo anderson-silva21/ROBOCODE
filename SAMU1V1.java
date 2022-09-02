@@ -1,4 +1,3 @@
-
 /**
 * @file SAMU1V1.java
 * @authors Anderson Silva, Adalberto Guedes, Mariana Rodrigues, Bruno Keller
