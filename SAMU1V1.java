@@ -1,5 +1,5 @@
 /**
-* @file SAMU1V1.java
+* @file SAMU.java
 * @authors Anderson Silva, Adalberto Guedes, Mariana Rodrigues, Bruno Keller
 * @date 02 Set 2022
 * @brief  Um advanced robot inspirado no comportamento dos sampleRobots Walls e Tracker
@@ -10,7 +10,7 @@ import robocode.util.*;
 import java.awt.geom.*;
 import java.awt.*;
 
-public class SAMU1V1 extends AdvancedRobot {
+public class SAMU extends AdvancedRobot {
 	int motionDirection = 1;//direcao do movimento (frente tras)
 	double edgeMovement; // movimento necessario para alcançar a borda]
 	int aux = 0;
